@@ -67,6 +67,12 @@ def new(collection, ini = {}, switch = True):
     if switch:
         switch_page(f"{util.collection_name[collection].lower()} edit")
 
+def update_or_insert(collection, x, x_updated, reset = True):
+    if x["_id"] == "new":
+        new(collection, ini = x_updated, switch = False)
+    else:
+        update_confirm(collection, x, x_updated, reset)
+
 # Finde in collection.field die id, und gebe im Datensatz return_field zurück. Falls list=True,
 # dann ist collection.field ein array.
 def references(collection, field, list = False):    
@@ -232,7 +238,7 @@ def delete_item(collection, id, switch = True):
     util.logger.info(f"User {st.session_state.user} hat in {util.collection_name[collection]} item {repr(collection, id)} gelöscht.")
     collection.delete_one({"_id": id})
     reset_vars("")
-    st.success(f"🎉 Erfolgreich gelöscht!  {s}")
+    st.success(f"🎉 Erfolgreich gelöscht")
     time.sleep(2)
     if switch:
         switch_page(util.collection_name[collection].lower())

@@ -46,10 +46,10 @@ def setup_session_state():
 
     # sem ist ein gewähltes Semester
     if "current_semester_id" not in st.session_state:
-        semesters = list(semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
+        semesters = list(st.session_state.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
         st.session_state.current_semester_id = semesters[0]["_id"]
     if "semester_id" not in st.session_state:
-        semesters = list(semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
+        semesters = list(st.session_state.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
         st.session_state.semester_id = semesters[0]["_id"]
     # expanded zeigt an, welches Element ausgeklappt sein soll
     if "expanded" not in st.session_state:
@@ -62,31 +62,38 @@ def setup_session_state():
     # Element to edit
     if "edit" not in st.session_state:
         st.session_state.edit = ""
+    # Subelement to edit
+    if "subedit" not in st.session_state:
+        st.session_state.subedit = ""
     # Determines which page we are on
     if "page" not in st.session_state:
         st.session_state.page = ""
+    if "veranstaltung_tmp" not in st.session_state:
+        st.session_state.veranstaltung_tmp = {}
+    # expanded zeigt an, welches Element ausgeklappt sein soll
+    if "expanded" not in st.session_state:
+        st.session_state.expanded = ""
 
     st.session_state.collection_name = {
-        person: "Personen",
-        rubrik: "Rubrik",
-        semester: "Semester",
-        studiengang: "Studiengänge",
-        veranstaltung: "Veranstaltungen",
-        stat_veranstaltung: "Veranstaltungsstatistik",
-        stat_semester: "Semesterstatistik"
+        st.session_state.person: "Personen",
+        st.session_state.rubrik: "Rubrik",
+        st.session_state.semester: "Semester",
+        st.session_state.studiengang: "Studiengänge",
+        st.session_state.veranstaltung: "Veranstaltungen",
+        st.session_state.stat_veranstaltung: "Veranstaltungsstatistik",
+        st.session_state.stat_semester: "Semesterstatistik"
     }
 
     st.session_state.new = {
-        stat_semester: {
+        st.session_state.stat_semester: {
             "name" : "", 
-            "semester" : [], 
-            "studiengang" : [], 
+            "einheit" : "", 
             "stat" : [],
             "kommentar" : ""
         },
-        stat_veranstaltung: {
+        st.session_state.stat_veranstaltung: {
             "name" : "", 
-            "studiengang" : [],
+            "einheit" : "", 
             "stat" : [],
             "kommentar" : ""
         }
@@ -106,4 +113,4 @@ veranstaltung = st.session_state.veranstaltung
 stat_veranstaltung = st.session_state.stat_veranstaltung
 stat_semester = st.session_state.stat_semester
 
-
+collection_name = st.session_state.collection_name

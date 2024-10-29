@@ -14,7 +14,7 @@ veranstaltung_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "title": "Eine Statistik für Veranstaltungen.",
-        "required": ["name", "rang", "stat", "kommentar"],
+        "required": ["name", "rang", "einheit", "stat", "kommentar"],
         "properties": {
             "name": {
                 "bsonType": "string",
@@ -23,6 +23,10 @@ veranstaltung_validator = {
             "rang": {
                 "bsonType": "int",
                 "description": "Der Rang der Statistik in der Darstellung -- required"
+            },
+            "einheit": {
+                "bsonType": "string",
+                "description": "Die Einheit der Statistik -- required"
             },
             "stat": {
                 "bsonType": "array",
@@ -45,7 +49,7 @@ veranstaltung_validator = {
                             }
                         },
                         "wert": {
-                            "bsonType": "int",
+                            "bsonType": "double",
                             "description": "Der angenommene Wert."
                         },
                         "kommentar": {
@@ -69,7 +73,7 @@ semester_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "title": "Eine Statistik für Semester.",
-        "required": ["name", "rang", "stat", "kommentar"],
+        "required": ["name", "rang", "einheit", "stat", "kommentar"],
         "properties": {
             "name": {
                 "bsonType": "string",
@@ -78,6 +82,10 @@ semester_validator = {
             "rang": {
                 "bsonType": "int",
                 "description": "Der Rang der Statistik in der Darstellung -- required"
+            },
+            "einheit": {
+                "bsonType": "string",
+                "description": "Die Einheit der Statistik -- required"
             },
             "stat": {
                 "bsonType": "array",
@@ -100,7 +108,7 @@ semester_validator = {
                             },
                         },
                         "wert": {
-                            "bsonType": "int",
+                            "bsonType": "double",
                             "description": "Der angenommene Wert."
                         },
                         "kommentar": {

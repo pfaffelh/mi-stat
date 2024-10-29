@@ -24,9 +24,9 @@ mongo_db_stat.command('collMod','veranstaltung', validator=schema20241019.verans
 print("Ab hier wird verändert")
 
 
-stat_sem.insert_one({"name" : "Einschreibezahlen", "rang" : 100, "semester" : [s["_id"] for s in sem.find({})], "studiengang" : [s["_id"] for s in stu.find({})], "stat" : [], "kommentar" : ""})
+stat_sem.insert_one({"name" : "Einschreibezahlen", "rang" : 100, "einheit" : "Studierende", "stat" : [], "kommentar" : ""})
 
-stat_ver.insert_one({"name" : "Anzahl Tutorate", "rang" : 100, "studiengang" : [], "stat" : [], "kommentar" : ""})
+stat_ver.insert_one({"name" : "Anzahl Tutorate", "rang" : 100, "einheit" : "Tutorate", "stat" : [], "kommentar" : ""})
 
 # Ab hier wird das Schema gecheckt
 print("Check schema")

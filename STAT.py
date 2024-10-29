@@ -1,55 +1,53 @@
 import streamlit as st
+import pymongo
 import time
-from streamlit_extras.switch_page_button import switch_page 
 
-# Seiten-Layout
-st.set_page_config(page_title="VVZ", page_icon=None, layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="STAT", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 
 from misc.config import *
 import misc.util as util
 import misc.tools as tools
 
-# Ab hier wird die Seite angezeigt
-st.header("STAT Login")
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-placeholder = st.empty()
-with placeholder.form("login"):
-    kennung = st.text_input("Benutzerkennung")
-    password = st.text_input("Passwort", type="password")
-    submit = st.form_submit_button("Login")
-    st.session_state.user = kennung
+# load css styles
+from misc.css_styles import init_css
+init_css()
 
-## TODO: Develop mode. Remove this later!
+if st.session_state.logged_in:
+    pg = st.navigation({
+        "Statistiken": [
+            st.Page("pages/01_Semester.py", title="Semester"),
+            st.Page("pages/01_Semester_edit.py", title="Semester"),
+            st.Page("pages/02_Veranstaltung.py", title="Veranstaltung"),
+            st.Page("pages/02_Veranstaltung_edit.py", title="Veranstaltung"),
+        ],
+        "Grafiken": [
+            st.Page("pages/01_Semester_Grafik.py", title="Semester"),
+            st.Page("pages/02_Veranstaltung_Grafik.py", title="Veranstaltung"),
+        ],
+    }, position = "hidden")
+    st.markdown("<style>.st-emotion-cache-16txtl3 { padding: 2rem 2rem; }</style>", unsafe_allow_html=True)
+    with st.sidebar:
+        st.image("static/ufr.png", use_column_width=True)
+        semesters = list(util.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
+        st.session_state.semester_id = st.selectbox(label="Semester", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["name_de"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "master_semester_choice")
+ 
+        st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
+        st.page_link("pages/01_Semester.py", label="Semester")
+        st.page_link("pages/02_Veranstaltung.py", label="Veranstaltung")
+        st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
+        st.page_link("pages/01_Semester_Grafik.py", label="Semester Grafik")
+        st.page_link("pages/02_Veranstaltung_Grafik.py", label="Veranstaltung Grafik")
+        st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
 
-#placeholder.empty()
-#st.session_state.logged_in = True
-#st.success("Login successful")
-#util.logger.info(f"User {st.session_state.user} hat in sich erfolgreich eingeloggt.")
-# make all neccesary variables available to session_state
-#util.setup_session_state()
-#switch_page("veranstaltungen")
+else:
+    pg = st.navigation([st.Page("login.py", title="Log in", icon=":material/login:")])
 
-if submit:
-    if tools.authenticate(kennung, password): 
-        if tools.can_edit(kennung):
-            # If the form is submitted and the email and password are correct,
-            # clear the form/container and display a success message
-            placeholder.empty()
-            st.session_state.logged_in = True
-            st.success("Login successful")
-            util.logger.info(f"User {st.session_state.user} hat in sich erfolgreich eingeloggt.")
-            # make all neccesary variables available to session_state
-            util.setup_session_state()
-            switch_page("semester")
-        else:
-            st.error("Nicht genügend Rechte, um STAT zu editieren.")
-            util.logger.info(f"User {kennung} hatte nicht gebügend Rechte, um sich einzuloggen.")
-            time.sleep(2)
-            st.rerun()
-    else: 
-        st.error("Login nicht korrekt, oder RZ-Authentifizierung nicht möglich. (Z.B., falls nicht mit VPN verbunden.)")
-        util.logger.info(f"Ein falscher Anmeldeversuch.")
-        time.sleep(2)
-#         st.rerun()
+pg.run()
+
+
+
 
 

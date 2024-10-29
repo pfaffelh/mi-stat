@@ -1,0 +1,252 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym, 
+			amsfonts, 
+			amssymb, 
+			amsthm, 
+			calc,  %#			enumerate, 
+			%fontawesome5,
+			graphicx,
+			longtable, 
+            makecell,
+			nicefrac, %# for \nicefrac{1}{2}
+			paralist,    %# for compactenum
+            pifont,
+            rotating,
+            tabularx,
+            colortbl
+			}
+\usepackage[table]{xcolor}
+\arrayrulecolor{lightgray} % Ändert die Farbe der Linien
+% \arrayrulewidth=1pt   % Setzt die Dicke der Linien
+
+%% if data["lang"] == "de"
+\usepackage{ngerman}
+%% endif
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true, %Colours links instead of ugly boxes
+  urlcolor = blue, %Colour for external hyperlinks
+  linkcolor = blue, %Colour of internal links
+  citecolor = blue %Colour of citations
+}
+\frenchspacing
+
+\newcommand{\mailto}[1]{\href{mailto:#1}{#1}}
+\renewenvironment{itemize}{\begin{list}{$\bullet$\ }{\itemsep.5ex\setlength{\topsep}{0.5\itemsep}\parsep0ex\labelsep1ex\settowidth{\labelwidth}{$\bullet$\ }\setlength{\leftmargin}{\labelwidth}\addtolength{\leftmargin}{3ex}\addtolength{\leftmargin}{\labelsep}}}{\end{list}} 
+\usepackage{pifont} 
+\newcommand{\xmark}{\ding{55}}
+\usepackage{draftwatermark}
+\SetWatermarkText{\VAR{data['wasserzeichen']}}
+\SetWatermarkScale{1}
+
+\setlength{\topmargin}{-2.5cm}
+\setlength{\oddsidemargin}{-1cm}
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{26.5cm}
+\parindent0em
+\parskip1ex
+
+\begin{document}
+
+\hrule\vskip1pt\hrule\medskip
+
+\resizebox{\textwidth}{!}{
+    %% if data["lang"] == "de"
+    Universität Freiburg -- Mathematisches Institut
+    %% else 
+    University of Freiburg -- Mathematical Institute
+    %% endif
+}
+
+\medskip
+\resizebox{\textwidth}{!}{\VAR{data["semester"]}}
+
+\bigskip
+\resizebox{\textwidth}{!}{\VAR{data["titel"]}}
+
+\medskip\hrule\vskip1pt\hrule
+
+\bigskip
+\bigskip
+
+%#\setlength{\baselineskip}{20pt}
+\hfill Version \today
+
+\thispagestyle{empty}
+\clearpage
+\tableofcontents
+
+\clearpage
+\addcontentsline{toc}{section}{{Hinweise}}\addtocontents{toc}{\medskip\hrule\medskip}
+
+%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%#%% Input eines zusätzlichen Files
+%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\VAR{data["vorspann"]}
+
+%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%#%%  BEGINN VERANSTALTUNGSTEIL
+%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% for rubrik in data["rubriken"]
+\clearpage
+\phantomsection
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+    \Huge\bfseries \VAR{rubrik['titel']}
+\end{center}
+\addcontentsline{toc}{section}{\textbf{\VAR{rubrik['titel']}}}
+\addtocontents{toc}{\medskip\hrule\medskip}\vspace*{\fill}\vspace*{\fill}\clearpage
+\vfill
+\thispagestyle{empty}
+\clearpage
+
+%% for veranstaltung in rubrik["veranstaltung"]
+\clearpage\hrule\vskip1pt\hrule
+%% if veranstaltung["url"] != ""
+\section*{\Large \href{\VAR{veranstaltung["url"]}}{\VAR{veranstaltung["titel"]}}}
+%% else 
+\section*{\Large \VAR{veranstaltung["titel"]}}
+%% endif
+\addcontentsline{toc}{subsection}{\VAR{veranstaltung["titel"]}\ \textcolor{gray}{(\em \VAR{veranstaltung["dozent"]})}}
+\vskip-2ex
+{\it \VAR{veranstaltung["person"]}}
+%% if veranstaltung["code"] != ""
+\hfill{\VAR{veranstaltung["code"]}}\\
+%% endif
+%% for line in veranstaltung["raumzeit"]
+\VAR{line}\\
+%% endfor 
+%% if veranstaltung["url"] != ""
+% Webseite: \url{\VAR{veranstaltung["url"]}}
+%% endif
+
+%% if data["include_inhalt"]
+%% if veranstaltung["inhalt"] != ""
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Inhalt:
+    %% else
+    Content:
+    %% endif
+}
+\VAR{veranstaltung["inhalt"]}
+%% endif 
+%% if veranstaltung["literatur"] != ""
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Literatur:
+    %% else
+    Literature:
+    %% endif
+}
+\VAR{veranstaltung["literatur"]}
+%% endif 
+%% if veranstaltung["vorkenntnisse"] != ""
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Vorkenntnisse:
+    %% else 
+    Prerequisites:
+    %% endif
+}
+\VAR{veranstaltung["vorkenntnisse"]}
+%% endif
+%% if veranstaltung["kommentar"] != ""
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Bemerkungen:
+    %% else 
+    Remarks:
+    %% endif 
+}
+\VAR{veranstaltung["kommentar"]}
+%% endif 
+%% endif
+%% if data["verw_kurz"]
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Verwendbar in folgenden Modulen:
+    %% else
+    Usable in the following modules:
+    %% endif 
+}
+%% for m in veranstaltung["verwendbarkeit_modul"]
+\VAR{m["titel"]}\\
+%% endfor 
+%% endif 
+
+%% if not data["verw_kurz"]
+\cleardoublepage
+\subsubsection*{\large
+    %% if data["lang"] == "de"
+    Verwendbarkeit, Studien- und Prüfungsleistungen:
+    %% else 
+    Usability and assessments:
+    %% endif 
+}
+
+\begin{tabularx}{\textwidth}{ X
+    %% for i in range(veranstaltung["verwendbarkeit"].shape[1])
+    |c
+    %% endfor
+}
+%% for y in veranstaltung["verwendbarkeit"].columns
+ &
+\makecell[c]{\rotatebox[origin=l]{90}{\parbox{
+            %% if veranstaltung["verwendbarkeit"].columns | length < 2
+            5
+            %% else 
+            7
+            %%endif
+            cm}{\raggedright
+                \begin{itemize}\item
+                    \VAR{y} 
+                \end{itemize}             }}}
+%% endfor
+\\[2ex] \hline
+%% for index, row in veranstaltung["verwendbarkeit"].iterrows()
+%% if index.split(" ")[0] != "Kommentar:"
+\hline \rule[0mm]{0cm}{.6cm}\VAR{index} \rule[-3mm]{0cm}{0cm}
+%% for y in veranstaltung["verwendbarkeit"].columns
+ &
+%% if row[y] 
+\makecell[c]{\xmark}
+%% endif 
+%% endfor
+\\
+%% endif 
+%% endfor
+\hline
+%% if veranstaltung["verwendbarkeit_hat_kommentar"]
+%% for y in veranstaltung["verwendbarkeit"].columns
+& \makecell[c]{\vphantom{$\displaystyle\int$}\ding{\VAR{veranstaltung["verwendbarkeit"].columns.get_loc(y)+172}}}
+%% endfor
+%% endif
+\\
+\end{tabularx}
+
+\medskip
+
+%% for index, row in veranstaltung["verwendbarkeit"].iterrows()
+    %% if index.split(" ")[0] == "Kommentar:"
+        %% for y in veranstaltung["verwendbarkeit"].columns
+            %% if row[y] 
+            \ding{\VAR{veranstaltung["verwendbarkeit"].columns.get_loc(y)+172}}
+            %% endif 
+        %% endfor
+        \VAR{index[11:]} 
+
+    %% endif 
+%% endfor
+
+\VAR{veranstaltung["kommentar_verwendbarkeit"]}
+
+%% endif 
+%% endfor
+%% endfor
+
+\end{document}
