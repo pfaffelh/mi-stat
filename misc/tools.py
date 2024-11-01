@@ -60,7 +60,7 @@ def new(collection, ini = {}, switch = True):
     for key, value in ini.items():
         util.new[collection][key] = value
     util.new[collection].pop("_id", None)
-    #st.write(util.new[collection])
+    st.write(util.new[collection])
     x = collection.insert_one(util.new[collection])
     st.session_state.edit=x.inserted_id
     util.logger.info(f"User {st.session_state.user} hat in {util.collection_name[collection]} ein neues Item angelegt.")
@@ -113,6 +113,17 @@ def find_dependent_veranstaltung(collection, id):
                     res.append(y["_id"])
     return res
 
+# Für Semester
+def kurzname_of_id(id):
+    try:
+        x = util.semester.find_one({"_id": id})["kurzname"]
+    except:
+        x = util.studiengang.find_one({"_id": id})["kurzname"]        
+    return x
+
+def id_of_kurzname(kurzname):
+    x = util.semester.find_one({"kurzname": kurzname})["_id"]
+    return x
 
 # Die Authentifizierung gegen den Uni-LDAP-Server
 def authenticate(username, password):

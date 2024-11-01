@@ -73,7 +73,12 @@ def setup_session_state():
     # expanded zeigt an, welches Element ausgeklappt sein soll
     if "expanded" not in st.session_state:
         st.session_state.expanded = ""
-
+    if "dict" not in st.session_state:
+        st.session_state.dict = {}
+    if "studiengang" not in st.session_state:
+        st.session_state.studiengang = []
+    if "semester_auswahl" not in st.session_state:
+        st.session_state.semester_auswahl = []
     st.session_state.collection_name = {
         st.session_state.person: "Personen",
         st.session_state.rubrik: "Rubrik",

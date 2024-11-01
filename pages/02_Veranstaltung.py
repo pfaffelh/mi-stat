@@ -1,17 +1,12 @@
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page 
 import time
 import pymongo
 import pandas as pd
 from bson import ObjectId
 
-
-# Seiten-Layout
-st.set_page_config(page_title="STAT", page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
-
 # check if session_state is initialized if not change to main page
 if 'logged_in' not in st.session_state:
-    switch_page("STAT")
+    st.switch_page("STAT.py")
 
 from misc.config import *
 import misc.util as util
@@ -27,25 +22,26 @@ init_css()
 # setup_session_state()
 
 # Navigation in Sidebar anzeigen
-tools.display_navigation()
+# tools.display_navigation()
 
 # Es geht hier vor allem um diese Collection:
-collection = util.stat_semester
+collection = util.stat_veranstaltung
 
-if st.session_state.page != "Statistik":
+if st.session_state.page != "veranstaltung":
     st.session_state.edit = ""
-st.session_state.page = "Statistik"
+st.session_state.page = "veranstaltung"
 
 # Ab hier wird die Webseite erzeugt
 if st.session_state.logged_in:
-    st.header("Semester-Statistiken")
-    st.write("Dies sind Statistiken, die nicht von einzelnen Veranstaltungen abhängen, aber eventuell von Studiengängen. Beispiele sind Bewerbungs- oder Einschreibestatistiken.")
+    st.header("Veranstaltungs-Statistiken")
+    st.write("Dies sind Statistiken für Veranstaltungen, die eventuell von einem Studiengang abhängen dürfen. Beispiele sind Belegzahlen.")
     st.write(" ")
     if st.button('**Neue Statistik hinzufügen**'):
         st.session_state.edit = "new"
-        switch_page("statistik edit")
+        st.session_state.expanded = "grunddaten"
+        st.switch_page("pages/01_Veranstaltung_edit.py")
 
-    stat = list(util.stat_semester.find({}, sort = [("rang", pymongo.ASCENDING)]))
+    stat = list(util.stat_veranstaltung.find({}, sort = [("rang", pymongo.ASCENDING)]))
 
     for x in stat:
         co1, co2, co3 = st.columns([1,1,23]) 
@@ -58,14 +54,11 @@ if st.session_state.logged_in:
             submit = st.button(abk, key=f"edit-{x['_id']}")
         if submit:
             st.session_state.edit = x["_id"]
-            switch_page("statistik edit")
+            st.switch_page("pages/02_Veranstaltung_edit.py")
 
 else:
-    switch_page("STAT")
+    st.switch_page("STAT.py")
 
 st.sidebar.button("logout", on_click = tools.logout)
-
-
-
 
 

@@ -45,3 +45,19 @@
 2024-10-29 12:49:41,299 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
 2024-10-29 13:10:01,365 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik ein neues Item angelegt.
 2024-10-29 13:49:09,750 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik item Semesterstatistik: Belegung 232 gelöscht.
+2024-10-29 23:51:19,982 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-10-29 23:53:11,592 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik item Semesterstatistik: Einschreibezahlen gelöscht.
+2024-10-30 00:07:06,269 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik ein neues Item angelegt.
+2024-10-30 00:15:14,859 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-10-30 06:42:38,540 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat sich ausgeloggt.
+2024-10-30 06:42:45,668 - WARNING - MI-STAT - LDAP-Error: {'result': -1, 'desc': "Can't contact LDAP server", 'errno': 110, 'ctrls': [], 'info': 'Connection timed out'}
+2024-10-30 06:42:45,668 - INFO - MI-STAT - Ein falscher Anmeldeversuch.
+2024-10-30 06:43:20,977 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-10-31 10:24:11,501 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-10-31 16:19:06,083 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 00:06:31,360 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
+2024-11-01 00:06:42,002 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik:  lömlö geändert.
+2024-11-01 00:08:13,111 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
+2024-11-01 00:10:28,647 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik:  lömlö geändert.
+2024-11-01 00:10:41,390 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
+2024-11-01 00:10:46,971 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
