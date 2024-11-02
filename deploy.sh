@@ -7,6 +7,6 @@ SERVER="www2"
 USERNAME="flask-reader"
 
 # Führe den Befehl "deploy" auf dem Remote-Server aus
-ssh $USERNAME@$SERVER 'cd mi-vvz; git pull'
-ssh $USERNAME@$SERVER 'sudo ./deploy-mi-vvz.sh > /dev/null'
+ssh $USERNAME@$SERVER 'cd mi-stat; git pull'
+ssh $USERNAME@$SERVER 'sudo ./deploy-mi-stat.sh > /dev/null'
 

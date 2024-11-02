@@ -82,3 +82,4 @@
 2024-11-02 22:19:48,057 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Veranstaltungsstatistik ein neues Item angelegt.
 2024-11-02 22:43:02,318 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
 2024-11-02 22:51:04,874 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-02 22:56:36,649 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat sich ausgeloggt.
