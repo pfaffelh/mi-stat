@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page 
 import pymongo
 import time
 import ldap
@@ -52,7 +51,7 @@ def update_confirm(collection, x, x_updated, reset = True):
         reset_vars("")
     st.toast("🎉 Erfolgreich geändert!")
 
-def new(collection, ini = {}, switch = True):
+def new(collection, ini = {}):
     if list(collection.find({ "rang" : { "$exists": True }})) != []:
         z = list(collection.find(sort = [("rang", pymongo.ASCENDING)]))
         rang = z[0]["rang"]-1
@@ -63,12 +62,10 @@ def new(collection, ini = {}, switch = True):
     x = collection.insert_one(util.new[collection])
     st.session_state.edit=x.inserted_id
     util.logger.info(f"User {st.session_state.user} hat in {util.collection_name[collection]} ein neues Item angelegt.")
-    if switch:
-        switch_page(f"{util.collection_name[collection].lower()} edit")
 
 def update_or_insert(collection, x, x_updated, reset = True):
     if x["_id"] == "new":
-        new(collection, ini = x_updated, switch = False)
+        new(collection, ini = x_updated)
     else:
         update_confirm(collection, x, x_updated, reset)
 
@@ -240,14 +237,12 @@ def new_semester_dict():
     name_en = semester_name_en(kurzname)
     return {"kurzname": kurzname, "name_de": name_de, "name_en": name_en, "rubrik":[], "code": [], "veranstaltung": [], "hp_sichtbar": True, "rang": most_current_semester["rang"]+1}
 
-def delete_item(collection, id, switch = True):
+def delete_item(collection, id):
     util.logger.info(f"User {st.session_state.user} hat in {util.collection_name[collection]} item {repr(collection, id)} gelöscht.")
     collection.delete_one({"_id": id})
     reset_vars("")
     st.success(f"🎉 Erfolgreich gelöscht")
     time.sleep(2)
-    if switch:
-        switch_page(util.collection_name[collection].lower())
 
 def delete_temporary(except_field = ""):
     """ Delete temporary data except for the given field."""

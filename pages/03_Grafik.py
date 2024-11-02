@@ -1,9 +1,7 @@
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page 
 import pymongo
 import pandas as pd
 import altair as alt
-from bson import ObjectId
 
 # check if session_state is initialized if not change to main page
 if 'logged_in' not in st.session_state:
@@ -116,17 +114,19 @@ if st.session_state.logged_in:
                         title=f"{tools.repr(collection, st.session_state[f"stat_choose_{i}"], False)}"
                     )
                 # Zeige die Grafik in Streamlit
-            st.altair_chart(chart[i])
+            if st.session_state[f"stat_choose_{i}"] is not None:
+                st.altair_chart(chart[i])
     if number:
         col = st.columns([1 for _ in range(number)])
     for i in range(number):
         with col[i]:
             st.divider()
-            st.write("Angezeigte Daten")
-            st.write(df[i])
+            if st.session_state[f"stat_choose_{i}"] is not None:
+                st.write("Angezeigte Daten")
+                st.write(df[i])
 
 else:
-    switch_page("STAT")
+    st.switch_page("STAT")
 
 st.sidebar.button("logout", on_click = tools.logout)
 
