@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 import pymongo
+import altair as alt
 
 col_list = [1,1,3,1,3,1,1]
 
@@ -64,7 +65,6 @@ new_entry = False
 
 # Ab hier wird die Webseite erzeugt
 if st.session_state.logged_in:
-    st.header("Veranstaltungsabhängige Statistik")
 
     # check if entry can be found in database
     if st.session_state.edit == "new":
@@ -74,7 +74,7 @@ if st.session_state.logged_in:
         x["_id"] = "new"
     else:
         x = collection.find_one({"_id": st.session_state.edit})
-        st.subheader(tools.repr(collection, x["_id"], False))
+    st.subheader(f"Veranstaltungs-Statistik {': ' + tools.repr(collection, x["_id"], False) if st.session_state.edit != 'new' else ''}")
     col1, col2 = st.columns([1, 1])
     with col1:
         if st.button("Zurück ohne Speichern"):
@@ -100,18 +100,16 @@ if st.session_state.logged_in:
         st.session_state.expanded = ""
         save = st.button('Speichern', type = "primary", on_click = tools.update_or_insert, args = (collection, x, x_updated, False), key = f"save_grunddaten")
 
-    st.write("### Alle Werte")
-    
-    st.write("Nur folgende Studiengänge/Semester anzeigen:", help = "Wenn nichts angegeben ist, werden alle Einträge gezeigt.")
-    col0, col1, col2 = st.columns([1,1,1], vertical_alignment="bottom")
-    with col0:
+    col0, col1, col2, col3 = st.columns([1,2,2,2], vertical_alignment="bottom")
+    col0.write("Nur folgendes anzeigen:")
+    with col1:
         st.session_state.studiengang = st.multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", key = f"anzeige_studiengaenge", label_visibility="hidden")
         semesters = list(util.semester.find(sort=[("rang", pymongo.DESCENDING)]))
-    with col1:
+    with col2:
         st.write("von...")
         semester_id_von = st.selectbox(label="von", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["kurzname"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "semester_von")
         semester_von = util.semester.find_one({"_id": semester_id_von})
-    with col2:
+    with col3:
         st.write("...bis...")
         semester_id_bis = st.selectbox(label="bis", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["kurzname"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "semester_bis")
         semester_bis = util.semester.find_one({"_id": semester_id_bis})
@@ -130,7 +128,6 @@ if st.session_state.logged_in:
     col[3].markdown(f"<div style='text-align: right'>Wert</div>", unsafe_allow_html=True)
     col[4].write("Kommentar")
 
-    st.write("### Neuer Wert")
     ver = list(util.veranstaltung.find({"hp_sichtbar": True, "semester": { "$in" : st.session_state.semester_auswahl}}))    
     for v in ver:
         v["semester_name"] = tools.repr(util.semester, v["semester"], False, True)
@@ -142,7 +139,7 @@ if st.session_state.logged_in:
         col = st.columns(col_list, vertical_alignment="center")    
 
         st.session_state.dict = {}
-        stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False)), placeholder = "alle", label_visibility = "collapsed", key = "dict_new_studiengang")
+        stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", label_visibility = "collapsed", key = "dict_new_studiengang")
         stu = list(util.studiengang.find({"_id": {"$in": stu_list}}, sort=[("name", pymongo.ASCENDING)]))
         st.session_state.dict["studiengang"] = [s["_id"] for s in stu]
 
@@ -150,10 +147,16 @@ if st.session_state.logged_in:
 
         with col[3]:
             st.session_state.dict["wert"] = st.number_input("Wert", value = None, label_visibility = "collapsed", step=1, key = "dict_new_wert")
-        st.session_state.dict["kommentar"] = col[4].text_input("", label_visibility = "collapsed", key = "dict_new_kommentar")
+        st.session_state.dict["kommentar"] = col[4].text_input("Kommentar", "", label_visibility = "collapsed", key = "dict_new_kommentar")
         submit = col[5].form_submit_button('Speichern', type = 'primary')
         if submit:
-            save_new_entry(x["stat"], st.session_state.dict)
+            # Wenn es den Eintrag für diese Veranstaltung und diesen Studiengang schon gibt, wird der neue Eintrag abgelehnt:
+            target = { "veranstaltung" : st.session_state.dict["veranstaltung"], "studiengang" : st.session_state.dict["studiengang"]}
+            if any(all(item.get(k) == v for k, v in target.items()) for item in x["stat"]):
+                st.toast("Eintrag für diesen Studiengang in dieser Veranstaltung bereits vorhanden. Eintrag abgelehnt!")
+                time.sleep(2)
+            else:
+                save_new_entry(x["stat"], st.session_state.dict)
             st.rerun()
 
     for s in semester_list:
@@ -163,56 +166,70 @@ if st.session_state.logged_in:
                 # falls s das Semester ist, in dem die Veranstaltung gehalten wurde:
                 if s in [v["semester"] for v in [util.veranstaltung.find_one({"_id" : item["veranstaltung"]})]]:
                     if show(item):
-                        if write_sem:
-                            st.write("<hr style='height:1px;margin:0px;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
-                        col = st.columns(col_list, vertical_alignment="top" if st.session_state.subedit != i else "bottom")
-                        if write_sem:
-                            col[0].write(tools.repr(util.semester, s, False, True))
-                            write_sem = False
                         if st.session_state.subedit == i:
-                            st.session_state.dict = {"studiengang" : item["studiengang"], "veranstaltung" : item["veranstaltung"]}
+                            with st.form("edit_entry"):
+                                if write_sem:
+                                    st.write("<hr style='height:1px;margin:0px;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
+                                col = st.columns(col_list, vertical_alignment="top" if st.session_state.subedit != i else "bottom")
+                                if write_sem:
+                                    col[0].write(tools.repr(util.semester, s, False, True))
+                                    write_sem = False
+                                    st.session_state.dict = {"studiengang" : item["studiengang"], "veranstaltung" : item["veranstaltung"]}
 
-                            if item["studiengang"] == []:
-                                col[1].write("alle")
-                            else:
-                                col[1].write(", ".join([tools.repr(util.studiengang, id, False, True) for id in item["studiengang"]])) 
-                            
-                            #stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({ "$or" : [{ "_id" : { "$in" : item["studiengang"]}}, {"sichtbar": True}]}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "Bitte auswählen", key = f"studiengang_{i}", label_visibility="hidden")
-                            #stu = list(util.studiengang.find({"_id": {"$in": stu_list}}, sort=[("name", pymongo.ASCENDING)]))
-                            #st.session_state.dict["studiengang"] = [s["_id"] for s in stu]
-                            
-                            col[2].write(tools.repr(util.veranstaltung, item["veranstaltung"], False))
-                            #ver = [x["_id"] for x in list(util.veranstaltung.find({"semester": s}))]
-                            #st.session_state.dict["veranstaltung"] = col[2].selectbox(label="Veranstaltung", options = ver, index = ver.index(item["veranstaltung"]), format_func = (lambda a: tools.repr(util.veranstaltung, a)), placeholder = "Wähle eine Veranstaltung", label_visibility = "hidden", key = "Veranstaltung edit")
-                            
-                            st.session_state.dict["wert"] = col[3].number_input("Wert", value = item["wert"], label_visibility="hidden", step=1.0, key = f"wert_{i}")
+                                if item["studiengang"] == []:
+                                    col[1].write("alle")
+                                else:
+                                    col[1].write(", ".join([tools.repr(util.studiengang, id, False, True) for id in item["studiengang"]])) 
+                                
+                                #stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({ "$or" : [{ "_id" : { "$in" : item["studiengang"]}}, {"sichtbar": True}]}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "Bitte auswählen", key = f"studiengang_{i}", label_visibility="hidden")
+                                #stu = list(util.studiengang.find({"_id": {"$in": stu_list}}, sort=[("name", pymongo.ASCENDING)]))
+                                #st.session_state.dict["studiengang"] = [s["_id"] for s in stu]
+                                
+                                col[2].write(tools.repr(util.veranstaltung, item["veranstaltung"], False))
+                                #ver = [x["_id"] for x in list(util.veranstaltung.find({"semester": s}))]
+                                #st.session_state.dict["veranstaltung"] = col[2].selectbox(label="Veranstaltung", options = ver, index = ver.index(item["veranstaltung"]), format_func = (lambda a: tools.repr(util.veranstaltung, a)), placeholder = "Wähle eine Veranstaltung", label_visibility = "hidden", key = "Veranstaltung edit")
+                                
+                                st.session_state.dict["wert"] = col[3].number_input("Wert", value = item["wert"], label_visibility="hidden", step=1.0, key = f"wert_{i}")
 
-                            st.session_state.dict["kommentar"] = col[4].text_input(item["kommentar"], label_visibility="hidden", key = f"kommentar_{i}")
+                                st.session_state.dict["kommentar"] = col[4].text_input("Kommentar", item["kommentar"], label_visibility="hidden", key = f"kommentar_{i}")
 
-                            with col[5]:
-                                save = st.button('Speichern', type = "primary")
-                                if save:
-                                    st.session_state.dict["wert"] = float(st.session_state.dict["wert"])
-                                    collection.update_one({"_id" : x["_id"]}, { "$set" : { f"stat.{i}" : st.session_state.dict}})
-                                    st.session_state.subedit = ""
-                                    st.session_state.dict = {}                            
-                                    st.rerun()
-                            with col[6]:
-                                with st.popover('Löschen', use_container_width=True):
-                                    colu1, colu2, colu3 = st.columns([1,1,1])
-                                    with colu1:
-                                        submit = st.button(label = "Wirklich löschen!", type = 'primary', key = f"delete-{i}")
-                                    if submit: 
-                                        stat = x["stat"]
-                                        del stat[i]
-                                        collection.update_one({"_id" : x["_id"]}, { "$set" : { "stat" : stat}})
-                                        collection.update_one({"_id" : x["_id"]}, { "$pull" : { "stat" : None}})
-                                        st.session_state.subedit = ""                                
+                                with col[5]:
+                                    save = st.form_submit_button('Speichern', type = "primary")
+                                    if save:
+                                        target = { "veranstaltung" : st.session_state.dict["veranstaltung"], "studiengang" : st.session_state.dict["studiengang"]}
+                                        # Wenn es den Eintrag für diese Veranstaltung und diesen Studiengang schon gibt, wird der neue Eintrag abgelehnt:
+                                        if any(all(item.get(k) == v for k, v in target.items()) for item in stat):
+                                            st.error("Eintrag für diesen Studiengang in dieser Veranstaltung bereits vorhanden. Eintrag abgelehnt!")
+                                        else:
+                                            st.session_state.dict["wert"] = float(st.session_state.dict["wert"])
+                                            collection.update_one({"_id" : x["_id"]}, { "$set" : { f"stat.{i}" : st.session_state.dict}})
+                                        st.session_state.subedit = ""
+                                        st.session_state.dict = {}                            
+                                        time.sleep(0.4)
                                         st.rerun()
-                                    with colu3: 
-                                        st.button(label="Abbrechen", on_click = st.success, args=("Nicht gelöscht!",), key = f"not-deleted-{i}")
+                                with col[6]:
+                                    with st.popover('Löschen', use_container_width=True):
+                                        colu1, colu2, colu3 = st.columns([1,1,1])
+                                        with colu1:
+                                            submit = st.form_submit_button(label = "Wirklich löschen!", type = 'primary')
+                                        if submit: 
+                                            stat = x["stat"]
+                                            del stat[i]
+                                            collection.update_one({"_id" : x["_id"]}, { "$set" : { "stat" : stat}})
+                                            collection.update_one({"_id" : x["_id"]}, { "$pull" : { "stat" : None}})
+                                            st.session_state.subedit = ""                                
+                                            st.rerun()
+                                        with colu3: 
+                                            st.form_submit_button(label="Abbrechen", on_click = st.success, args=("Nicht gelöscht!",))
 
                         else:
+                            if write_sem:
+                                st.write("<hr style='height:1px;margin:0px;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
+                            col = st.columns(col_list, vertical_alignment="top" if st.session_state.subedit != i else "bottom")
+                            if write_sem:
+                                col[0].write(tools.repr(util.semester, s, False, True))
+                                write_sem = False
+                                st.session_state.dict = {"studiengang" : item["studiengang"], "veranstaltung" : item["veranstaltung"]}
                             if item["studiengang"] == []:
                                 col[1].write("alle")
                             else:

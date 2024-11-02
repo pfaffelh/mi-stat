@@ -2,15 +2,15 @@ from pymongo import MongoClient
 
 # This is the mongodb
 cluster = MongoClient("mongodb://127.0.0.1:27017")
-mongo_db = cluster["stat"]
+mongo_db = cluster["vvz"]
 
 # collections sind:
 
-# veranstaltung
-# semester
+# stat_veranstaltung
+# stat_semester
 
 # Gemeint ist hier eine Statistik zu einer Veranstaltung
-veranstaltung_validator = {
+stat_veranstaltung_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "title": "Eine Statistik für Veranstaltungen.",
@@ -69,7 +69,7 @@ veranstaltung_validator = {
 
 # Gemeint ist hier eine Statistik zu einem Semester
 # Sie darf auch von einem Studiengang abhängen
-semester_validator = {
+stat_semester_validator = {
     "$jsonSchema": {
         "bsonType": "object",
         "title": "Eine Statistik für Semester.",

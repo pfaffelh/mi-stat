@@ -60,7 +60,6 @@ def new(collection, ini = {}, switch = True):
     for key, value in ini.items():
         util.new[collection][key] = value
     util.new[collection].pop("_id", None)
-    st.write(util.new[collection])
     x = collection.insert_one(util.new[collection])
     st.session_state.edit=x.inserted_id
     util.logger.info(f"User {st.session_state.user} hat in {util.collection_name[collection]} ein neues Item angelegt.")
@@ -157,10 +156,6 @@ def reset_vars(text=""):
 
 def display_navigation():
     st.markdown("<style>.st-emotion-cache-16txtl3 { padding: 2rem 2rem; }</style>", unsafe_allow_html=True)
-    with st.sidebar:
-        st.image("static/ufr.png", use_column_width=True)
-        semesters = list(util.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
-        st.session_state.semester_id = st.selectbox(label="Semester", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["name_de"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "master_semester_choice")
 
     st.sidebar.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
     st.sidebar.page_link("pages/01_Semester.py", label="Semester")

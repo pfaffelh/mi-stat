@@ -61,3 +61,22 @@
 2024-11-01 00:10:28,647 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik:  lömlö geändert.
 2024-11-01 00:10:41,390 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
 2024-11-01 00:10:46,971 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
+2024-11-01 20:08:28,890 - WARNING - MI-STAT - LDAP-Error: {'result': -1, 'desc': "Can't contact LDAP server", 'errno': 110, 'ctrls': [], 'info': 'Connection timed out'}
+2024-11-01 20:08:28,892 - INFO - MI-STAT - Ein falscher Anmeldeversuch.
+2024-11-01 20:08:39,155 - WARNING - MI-STAT - LDAP-Error: {'result': -1, 'desc': "Can't contact LDAP server", 'errno': 110, 'ctrls': [], 'info': 'Connection timed out'}
+2024-11-01 20:08:39,156 - INFO - MI-STAT - Ein falscher Anmeldeversuch.
+2024-11-01 20:08:40,559 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 20:09:34,656 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 20:34:30,266 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 20:35:08,327 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 20:35:36,149 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-01 20:37:50,432 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-02 22:02:56,778 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat sich ausgeloggt.
+2024-11-02 22:03:03,126 - WARNING - MI-STAT - LDAP-Error: {'result': -1, 'desc': "Can't contact LDAP server", 'errno': 110, 'ctrls': [], 'info': 'Connection timed out'}
+2024-11-02 22:03:03,127 - INFO - MI-STAT - Ein falscher Anmeldeversuch.
+2024-11-02 22:03:14,391 - WARNING - MI-STAT - LDAP-Error: {'result': -1, 'desc': "Can't contact LDAP server", 'errno': 110, 'ctrls': [], 'info': 'Connection timed out'}
+2024-11-02 22:03:14,392 - INFO - MI-STAT - Ein falscher Anmeldeversuch.
+2024-11-02 22:03:18,160 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-02 22:15:57,616 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik Item Semesterstatistik: Einschreibezahlen geändert.
+2024-11-02 22:16:14,697 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Semesterstatistik ein neues Item angelegt.
+2024-11-02 22:19:48,057 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Veranstaltungsstatistik ein neues Item angelegt.

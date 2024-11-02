@@ -29,16 +29,15 @@ def setup_session_state():
         st.session_state.user = mongo_db_users["user"]
         st.session_state.group = mongo_db_users["group"]
 
-        mongo_db_vvz = cluster["vvz"]
-        mongo_db_stat = cluster["stat"]
+        mongo_db = cluster["vvz"]
         logger.debug("Connected to MongoDB")
-        st.session_state.rubrik = mongo_db_vvz["rubrik"]
-        st.session_state.person = mongo_db_vvz["person"]
-        st.session_state.semester = mongo_db_vvz["semester"]
-        st.session_state.studiengang = mongo_db_vvz["studiengang"]
-        st.session_state.veranstaltung = mongo_db_vvz["veranstaltung"]
-        st.session_state.stat_veranstaltung = mongo_db_stat["veranstaltung"]
-        st.session_state.stat_semester = mongo_db_stat["semester"]
+        st.session_state.rubrik = mongo_db["rubrik"]
+        st.session_state.person = mongo_db["person"]
+        st.session_state.semester = mongo_db["semester"]
+        st.session_state.studiengang = mongo_db["studiengang"]
+        st.session_state.veranstaltung = mongo_db["veranstaltung"]
+        st.session_state.stat_veranstaltung = mongo_db["stat_veranstaltung"]
+        st.session_state.stat_semester = mongo_db["stat_semester"]
         
     except: 
         logger.error("Verbindung zur Datenbank nicht möglich!")

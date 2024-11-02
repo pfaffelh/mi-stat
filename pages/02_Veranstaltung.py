@@ -39,7 +39,7 @@ if st.session_state.logged_in:
     if st.button('**Neue Statistik hinzufügen**'):
         st.session_state.edit = "new"
         st.session_state.expanded = "grunddaten"
-        st.switch_page("pages/01_Veranstaltung_edit.py")
+        st.switch_page("pages/02_Veranstaltung_edit.py")
 
     stat = list(util.stat_veranstaltung.find({}, sort = [("rang", pymongo.ASCENDING)]))
 

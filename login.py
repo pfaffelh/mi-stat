@@ -11,14 +11,16 @@ import misc.tools as tools
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-st.header("STAT Login")
+col0, col1, col2 = st.columns([1,1,1])
 
-placeholder = st.empty()
-with placeholder.form("login"):
-    kennung = st.text_input("Benutzerkennung")
-    password = st.text_input("Passwort", type="password")
-    submit = st.form_submit_button("Login")
-    st.session_state.user = kennung
+with col1:
+    st.header("STAT Login")
+    placeholder = st.empty()
+    with placeholder.form("login"):
+        kennung = st.text_input("Benutzerkennung")
+        password = st.text_input("Passwort", type="password")
+        submit = st.form_submit_button("Login")
+        st.session_state.user = kennung
 
 if submit:
     if tools.authenticate(kennung, password): 

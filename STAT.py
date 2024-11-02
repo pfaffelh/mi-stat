@@ -24,22 +24,18 @@ if st.session_state.logged_in:
             st.Page("pages/02_Veranstaltung_edit.py", title="Veranstaltung"),
         ],
         "Grafiken": [
-            st.Page("pages/01_Semester_Grafik.py", title="Semester"),
-            st.Page("pages/02_Veranstaltung_Grafik.py", title="Veranstaltung"),
+            st.Page("pages/03_Grafik.py", title="Grafiken"),
         ],
     }, position = "hidden")
     st.markdown("<style>.st-emotion-cache-16txtl3 { padding: 2rem 2rem; }</style>", unsafe_allow_html=True)
     with st.sidebar:
         st.image("static/ufr.png", use_column_width=True)
-        semesters = list(util.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
-        st.session_state.semester_id = st.selectbox(label="Semester", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["name_de"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "master_semester_choice")
  
         st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
         st.page_link("pages/01_Semester.py", label="Semester")
         st.page_link("pages/02_Veranstaltung.py", label="Veranstaltung")
         st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
-        st.page_link("pages/01_Semester_Grafik.py", label="Semester Grafik")
-        st.page_link("pages/02_Veranstaltung_Grafik.py", label="Veranstaltung Grafik")
+        st.page_link("pages/03_Grafik.py", label="Grafiken")
         st.write("<hr style='height:1px;margin:0px;;border:none;color:#333;background-color:#333;' /> ", unsafe_allow_html=True)
 
 else:
