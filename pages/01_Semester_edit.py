@@ -59,7 +59,7 @@ if st.session_state.logged_in:
         x["_id"] = "new"
     else:
         x = collection.find_one({"_id": st.session_state.edit})
-    st.header(f"Semester-Statistik {': ' + tools.repr(collection, x["_id"], False) if st.session_state.edit != 'new' else ''}")
+    st.header(f"Semester-Statistik {': ' + tools.repr(collection, x['_id'], False) if st.session_state.edit != 'new' else ''}")
     col1, col2 = st.columns([1, 1])
     with col1:
         if st.button("Zurück ohne Speichern"):
