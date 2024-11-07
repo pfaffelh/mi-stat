@@ -54,7 +54,7 @@ if st.session_state.logged_in:
             else:
                 st.subheader("Veranstaltungs-Statistik")
                 collection = util.stat_veranstaltung
-            st.selectbox("Statistik", [x["_id"] for x in list(collection.find(sort = [("rang", pymongo.ASCENDING)]))], None, format_func=(lambda a: tools.repr(collection, a, False)), key = f"stat_choose_{i}" )
+            st.selectbox("Statistik", [x["_id"] for x in list(collection.find(sort = [("rang", pymongo.ASCENDING)]))], None, format_func=(lambda a: tools.repr(collection, a, False)), key = f"stat_choose_{i}", placeholder = "Bitte auswählen" )
             st.multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", key = f"studiengang_choose_{i}")
 
             if i >= number_semester:

@@ -101,8 +101,10 @@ if st.session_state.logged_in:
         st.session_state.expanded = ""
         save = st.button('Speichern', type = "primary", on_click = tools.update_or_insert, args = (collection, x, x_updated, False), key = f"save_grunddaten")
 
+    st.write("##### Auswahl")
     col0, col1, col2, col3 = st.columns([1,2,2,2], vertical_alignment="bottom")
     col0.write("Nur folgendes anzeigen:")
+
     with col1:
         st.session_state.studiengang = st.multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", key = f"anzeige_studiengaenge")
         semesters = list(util.semester.find(sort=[("rang", pymongo.DESCENDING)]))
@@ -122,6 +124,7 @@ if st.session_state.logged_in:
     
     semester_list = [s["_id"] for s in list(util.semester.find(sort = [("kurzname", pymongo.DESCENDING)]))]
 
+    st.write("##### Neuer Eintrag")
     col = st.columns(col_list)
     col[0].write("Semester")
     col[1].write("Studiengänge")
@@ -160,6 +163,7 @@ if st.session_state.logged_in:
                 save_new_entry(x["stat"], st.session_state.dict)
             st.rerun()
 
+    st.write("##### Alle Einträge")
     for s in semester_list:
         if s in st.session_state.semester_auswahl and s in [v["semester"] for v in list(util.veranstaltung.find({"_id" : { "$in": [item["veranstaltung"] for item in x["stat"]]}}))]:
             write_sem = True
@@ -198,15 +202,11 @@ if st.session_state.logged_in:
                                     save = st.form_submit_button('Speichern', type = "primary")
                                     if save:
                                         target = { "veranstaltung" : st.session_state.dict["veranstaltung"], "studiengang" : st.session_state.dict["studiengang"]}
-                                        # Wenn es den Eintrag für diese Veranstaltung und diesen Studiengang schon gibt, wird der neue Eintrag abgelehnt:
-                                        if any(all(item.get(k) == v for k, v in target.items()) for item in stat):
-                                            st.error("Eintrag für diesen Studiengang in dieser Veranstaltung bereits vorhanden. Eintrag abgelehnt!")
-                                        else:
-                                            st.session_state.dict["wert"] = float(st.session_state.dict["wert"])
-                                            collection.update_one({"_id" : x["_id"]}, { "$set" : { f"stat.{i}" : st.session_state.dict}})
+                                        st.session_state.dict["wert"] = float(st.session_state.dict["wert"])
+                                        collection.update_one({"_id" : x["_id"]}, { "$set" : { f"stat.{i}" : st.session_state.dict}})
                                         st.session_state.subedit = ""
                                         st.session_state.dict = {}                            
-                                        time.sleep(0.4)
+                                        time.sleep(0.0)
                                         st.rerun()
                                 with col[6]:
                                     with st.popover('Löschen', use_container_width=True):

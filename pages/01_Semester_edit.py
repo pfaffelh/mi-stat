@@ -86,6 +86,7 @@ if st.session_state.logged_in:
         save = st.button('Speichern', type = "primary", on_click = tools.update_or_insert, args = (collection, x, x_updated, False), key = f"save_grunddaten")
 
     
+    st.write("##### Auswahl")
     col0, col1, col2, col3 = st.columns([1,2,2,2], vertical_alignment="bottom")
     col0.write("Nur folgendes anzeigen:")
     with col1: 
@@ -107,6 +108,7 @@ if st.session_state.logged_in:
     semester_list = [s["_id"] for s in list(util.semester.find(sort = [("kurzname", pymongo.DESCENDING)]))]
 
 
+    st.write("##### Neuer Eintrag")
     col = st.columns(col_list)
     col[0].write("Semester")
     col[1].write("Studiengänge")
@@ -135,6 +137,7 @@ if st.session_state.logged_in:
             st.rerun()
 
 
+    st.write("##### Alle Einträge")
     for s in semester_list:
         if s in st.session_state.semester_auswahl and s in [item["semester"] for item in x["stat"]]:
             write_sem = True
