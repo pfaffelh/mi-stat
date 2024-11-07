@@ -182,9 +182,9 @@ def repr(collection, id, show_collection = True, short = False):
         sem = util.semester.find_one({"_id": x["semester"]})["kurzname"]
         res = x['name_de'] if short else f"{x['name_de']} ({s}, {sem})"
     elif collection == util.stat_semester:
-        res = f"{x["name"]}"
+        res = f"{x['name']}"
     elif collection == util.stat_veranstaltung:
-        res = f"{x["name"]}"
+        res = f"{x['name']}"
     if show_collection:
         res = f"{util.collection_name[collection]}: {res}"
     return res
