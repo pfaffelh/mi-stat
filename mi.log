@@ -84,3 +84,7 @@
 2024-11-02 22:51:04,874 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
 2024-11-02 22:56:36,649 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat sich ausgeloggt.
 2024-11-02 23:07:24,826 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-02 23:54:58,514 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-02 23:55:04,392 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat sich ausgeloggt.
+2024-11-07 22:30:40,208 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-07 22:32:04,343 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Veranstaltungsstatistik item Veranstaltungsstatistik: Analysis I gelöscht.
