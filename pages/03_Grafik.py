@@ -102,7 +102,7 @@ if st.session_state.logged_in:
                         color='studiengang:N',  # Unterschiedliche Farben für jede Variable
                         column=alt.Column('studiengang', title="", header=alt.Header(labelAngle=270))  # Rotate column titles
                     ).properties(
-                        title=f"{tools.repr(collection, st.session_state[f"stat_choose_{i}"], False)}"
+                        title=f"{tools.repr(collection, st.session_state[f'stat_choose_{i}'], False)}"
                     )
             else:
                 collection = util.stat_veranstaltung

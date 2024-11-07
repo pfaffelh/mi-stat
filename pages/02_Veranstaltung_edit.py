@@ -103,7 +103,7 @@ if st.session_state.logged_in:
     col0, col1, col2, col3 = st.columns([1,2,2,2], vertical_alignment="bottom")
     col0.write("Nur folgendes anzeigen:")
     with col1:
-        st.session_state.studiengang = st.multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", key = f"anzeige_studiengaenge", label_visibility="hidden")
+        st.session_state.studiengang = st.multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", key = f"anzeige_studiengaenge")
         semesters = list(util.semester.find(sort=[("rang", pymongo.DESCENDING)]))
     with col2:
         st.write("von...")
