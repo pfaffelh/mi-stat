@@ -123,7 +123,7 @@ if st.session_state.logged_in:
         stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", label_visibility = "collapsed", key = "dict_new_studiengang")
         stu = list(util.studiengang.find({"_id": {"$in": stu_list}}, sort=[("name", pymongo.ASCENDING)]))
         st.session_state.dict["studiengang"] = [s["_id"] for s in stu]
-        st.session_state.dict["wert"] = col[2].number_input("Wert", value = None, label_visibility = "collapsed", step=1, key = "dict_new_wert")
+        st.session_state.dict["wert"] = col[2].number_input("Wert", value = None, label_visibility = "collapsed", step=1.0, key = "dict_new_wert")
         st.session_state.dict["kommentar"] = col[3].text_input("Kommentar", "", label_visibility = "collapsed", key = "dict_new_kommentar")
         submit = col[4].form_submit_button('Speichern', type = 'primary')
         if submit:
