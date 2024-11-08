@@ -150,7 +150,7 @@ if st.session_state.logged_in:
         st.session_state.dict["veranstaltung"] = col[2].selectbox("Veranstaltung", ver, None, format_func = (lambda a: tools.repr(util.veranstaltung, a, False)), placeholder = "Bitte auswählen", label_visibility = "collapsed", key = "dict_new_veranstaltung")
 
         with col[3]:
-            st.session_state.dict["wert"] = st.number_input("Wert", value = None, label_visibility = "collapsed", step=1, key = "dict_new_wert")
+            st.session_state.dict["wert"] = st.number_input("Wert", value = None, label_visibility = "collapsed", step=1.0, key = "dict_new_wert")
         st.session_state.dict["kommentar"] = col[4].text_input("Kommentar", "", label_visibility = "collapsed", key = "dict_new_kommentar")
         submit = col[5].form_submit_button('Speichern', type = 'primary')
         if submit:
