@@ -118,7 +118,7 @@ if st.session_state.logged_in:
         semester_bis = util.semester.find_one({"_id": semester_id_bis})
 
 
-    st.session_state.semester_auswahl = [s["_id"] for s in list(util.semester.find({"rang": {"$gte": semester_von["rang"], "$lte": semester_bis["rang"]}}))]
+    st.session_state.semester_auswahl = [s["_id"] for s in list(util.semester.find({"rang": {"$gte": semester_von["rang"], "$lte": semester_bis["rang"]}}, sort = [("kurzname", pymongo.DESCENDING)]))]
     
     st.divider()
     

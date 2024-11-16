@@ -180,7 +180,7 @@ def repr(collection, id, show_collection = True, short = False):
     elif collection == util.veranstaltung:
         s = ", ".join([util.person.find_one({"_id" : id1})["name"] for id1 in x["dozent"]])
         sem = util.semester.find_one({"_id": x["semester"]})["kurzname"]
-        res = x['name_de'] if short else f"{x['name_de']} ({s}, {sem})"
+        res = x['name_de'] if short else f"{sem}: {x['name_de']} ({s})"
     elif collection == util.stat_semester:
         res = f"{x['name']}"
     elif collection == util.stat_veranstaltung:

@@ -101,12 +101,11 @@ if st.session_state.logged_in:
         st.write("...bis...")
         semester_id_bis = st.selectbox(label="bis", options = [x["_id"] for x in semesters], index = [s["_id"] for s in semesters].index(st.session_state.semester_id), format_func = (lambda a: util.semester.find_one({"_id": a})["kurzname"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "semester_bis")
         semester_bis = util.semester.find_one({"_id": semester_id_bis})
-    st.session_state.semester_auswahl = [s["_id"] for s in list(util.semester.find({"rang": {"$gte": semester_von["rang"], "$lte": semester_bis["rang"]}}))]
+    st.session_state.semester_auswahl = [s["_id"] for s in list(util.semester.find({"rang": {"$gte": semester_von["rang"], "$lte": semester_bis["rang"]}}, sort = [("kurzname", pymongo.DESCENDING)]))]
     
     st.divider()
     
     semester_list = [s["_id"] for s in list(util.semester.find(sort = [("kurzname", pymongo.DESCENDING)]))]
-
 
     st.write("##### Neuer Eintrag")
     col = st.columns(col_list)
@@ -119,7 +118,7 @@ if st.session_state.logged_in:
         col = st.columns(col_list, vertical_alignment="center")    
         st.session_state.dict = {}
         semesters = list(util.semester.find(sort=[("kurzname", pymongo.DESCENDING)]))
-        st.session_state.dict["semester"] = col[0].selectbox(label="Semester", options = st.session_state.semester_auswahl, index = len(st.session_state.semester_auswahl)-1, format_func = (lambda a: util.semester.find_one({"_id": a})["kurzname"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "dict_new_semester")
+        st.session_state.dict["semester"] = col[0].selectbox(label="Semester", options = st.session_state.semester_auswahl, index = 0, format_func = (lambda a: util.semester.find_one({"_id": a})["kurzname"]), placeholder = "Wähle ein Semester", label_visibility = "collapsed", key = "dict_new_semester")
         stu_list = col[1].multiselect("Studiengänge", [x["_id"] for x in util.studiengang.find({"sichtbar": True}, sort = [("name", pymongo.ASCENDING)])], [], format_func = (lambda a: tools.repr(util.studiengang, a, False, True)), placeholder = "alle", label_visibility = "collapsed", key = "dict_new_studiengang")
         stu = list(util.studiengang.find({"_id": {"$in": stu_list}}, sort=[("name", pymongo.ASCENDING)]))
         st.session_state.dict["studiengang"] = [s["_id"] for s in stu]

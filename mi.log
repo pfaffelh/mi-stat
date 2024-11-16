@@ -90,3 +90,4 @@
 2024-11-07 22:32:04,343 - INFO - MI-STAT - User Collection(Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'user'), 'user') hat in Veranstaltungsstatistik item Veranstaltungsstatistik: Analysis I gelöscht.
 2024-11-07 22:53:15,738 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
 2024-11-08 10:01:30,280 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.
+2024-11-16 22:57:20,407 - INFO - MI-STAT - User pp131 hat in sich erfolgreich eingeloggt.

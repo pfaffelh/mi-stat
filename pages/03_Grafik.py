@@ -62,7 +62,7 @@ if st.session_state.logged_in:
 
     if number:
         col = st.columns([1 for _ in range(number)])
-    df = chart = [1 for _ in range(number)]
+    df = df2 = chart = [1 for _ in range(number)]
     for i in range(number):
         if i < number_semester:
             collection = util.stat_semester
@@ -79,8 +79,8 @@ if st.session_state.logged_in:
                         item["semester"] = util.semester.find_one({"_id": util.veranstaltung.find_one({"_id" : item["veranstaltung"]})["semester"]})["_id"]
                         item["rubrik"] = util.rubrik.find_one({"_id": util.veranstaltung.find_one({"_id" : item["veranstaltung"]})["rubrik"]})["_id"]
                         item["rubrik"] = tools.repr(util.rubrik, item["rubrik"])
-                        item["veranstaltung"] = tools.repr(util.veranstaltung, item["veranstaltung"], False, True)
-                    if (st.session_state[f"muster_{i}"] in item["rubrik"] + ": " + item["veranstaltung"] and item["semester"] in st.session_state.semester_auswahl and (item["studiengang"] == [] or st.session_state[f"studiengang_choose_{i}"] == [] or len([x for x in item["studiengang"] if x in st.session_state[f"studiengang_choose_{i}"]]) > 0)):
+                        item["veranstaltung"] = f"{util.semester.find_one({"_id": item["semester"]})["kurzname"]}: {tools.repr(util.veranstaltung, item['veranstaltung'], False, True)}"
+                    if ((i < number_semester or (i >= number_semester and st.session_state[f"muster_{i}"] in item["rubrik"] + ": " + item["veranstaltung"])) and item["semester"] in st.session_state.semester_auswahl and (item["studiengang"] == [] or st.session_state[f"studiengang_choose_{i}"] == [] or len([x for x in item["studiengang"] if x in st.session_state[f"studiengang_choose_{i}"]]) > 0)):
                         append = True
                     item["semester"] = util.semester.find_one({"_id": item["semester"]})["kurzname"]
                     item["studiengang"] = "alle" if item["studiengang"] == [] else ", ".join([tools.repr(util.studiengang, id, False, True) for id in item["studiengang"]])
@@ -88,6 +88,8 @@ if st.session_state.logged_in:
                         stat_choice.append(item)
                         append=False
                 df[i] = pd.DataFrame.from_records(stat_choice)
+                with st.expander("Data"):
+                    st.write(df[i])
     if number:
         col = st.columns([1 for _ in range(number)])
     for i in range(number):
@@ -98,7 +100,7 @@ if st.session_state.logged_in:
                     # Erstelle die Altair-Balkengrafik mit verschiedenen Farben für jede Variable
                     chart[i] = alt.Chart(df[i]).mark_bar().encode(
                         x=alt.X('semester:N', title=''),
-                        y=alt.Y('wert:Q', title='Studiengang'),
+                        y=alt.Y('wert:Q', title=f"{tools.repr(collection, st.session_state[f'stat_choose_{i}'], False)}"),
                         color='studiengang:N',  # Unterschiedliche Farben für jede Variable
                         column=alt.Column('studiengang', title="", header=alt.Header(labelAngle=270))  # Rotate column titles
                     ).properties(
@@ -106,12 +108,14 @@ if st.session_state.logged_in:
                     )
             else:
                 collection = util.stat_veranstaltung
+                df[i] = df[i].sort_values(by = ["semester", "wert"], ascending = [True, False])
                 if st.session_state[f"stat_choose_{i}"] is not None:
+                    color_semester = st.toggle("Semester einfärben", True)
                     # Erstelle die Altair-Balkengrafik mit verschiedenen Farben für jede Variable
                     chart[i] = alt.Chart(df[i]).mark_bar().encode(
-                        x=alt.X('veranstaltung:N', title=''),
-                        y=alt.Y('wert:Q', title='Studiengang'),
-                        color='studiengang:N',  # Unterschiedliche Farben für jede Variable
+                        x=alt.X('veranstaltung:N', axis=alt.Axis(labelAngle=270, labelLimit=500), title='', sort = df[i]["veranstaltung"]),
+                        y=alt.Y('wert:Q', title=f"{tools.repr(collection, st.session_state[f'stat_choose_{i}'], False)}"),
+                        color='semester:N' if color_semester else 'studiengang:N',  # Unterschiedliche Farben für jede Variable
                         column=alt.Column('studiengang', title="", header=alt.Header(labelAngle=270))  # Rotate column titles
                     ).properties(
                         title=f"{tools.repr(collection, st.session_state[f'stat_choose_{i}'], False)}"
@@ -119,14 +123,6 @@ if st.session_state.logged_in:
                 # Zeige die Grafik in Streamlit
             if st.session_state[f"stat_choose_{i}"] is not None:
                 st.altair_chart(chart[i])
-    if number:
-        col = st.columns([1 for _ in range(number)])
-    for i in range(number):
-        with col[i]:
-            st.divider()
-            if st.session_state[f"stat_choose_{i}"] is not None:
-                st.write("Angezeigte Daten")
-                st.write(df[i])
 
 else:
     st.switch_page("STAT")
