@@ -79,7 +79,7 @@ if st.session_state.logged_in:
                         item["semester"] = util.semester.find_one({"_id": util.veranstaltung.find_one({"_id" : item["veranstaltung"]})["semester"]})["_id"]
                         item["rubrik"] = util.rubrik.find_one({"_id": util.veranstaltung.find_one({"_id" : item["veranstaltung"]})["rubrik"]})["_id"]
                         item["rubrik"] = tools.repr(util.rubrik, item["rubrik"])
-                        item["veranstaltung"] = f"{util.semester.find_one({"_id": item["semester"]})["kurzname"]}: {tools.repr(util.veranstaltung, item['veranstaltung'], False, True)}"
+                        item["veranstaltung"] = f"{util.semester.find_one({'_id': item['semester']})['kurzname']}: {tools.repr(util.veranstaltung, item['veranstaltung'], False, True)}"
                     if ((i < number_semester or (i >= number_semester and st.session_state[f"muster_{i}"] in item["rubrik"] + ": " + item["veranstaltung"])) and item["semester"] in st.session_state.semester_auswahl and (item["studiengang"] == [] or st.session_state[f"studiengang_choose_{i}"] == [] or len([x for x in item["studiengang"] if x in st.session_state[f"studiengang_choose_{i}"]]) > 0)):
                         append = True
                     item["semester"] = util.semester.find_one({"_id": item["semester"]})["kurzname"]
