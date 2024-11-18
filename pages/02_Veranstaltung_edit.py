@@ -179,7 +179,7 @@ if st.session_state.logged_in:
                                 if write_sem:
                                     col[0].write(tools.repr(util.semester, s, False, True))
                                     write_sem = False
-                                    st.session_state.dict = {"studiengang" : item["studiengang"], "veranstaltung" : item["veranstaltung"]}
+                                st.session_state.dict = {"studiengang" : item["studiengang"], "veranstaltung" : item["veranstaltung"]}
 
                                 if item["studiengang"] == []:
                                     col[1].write("alle")
