@@ -72,7 +72,7 @@ if st.session_state.logged_in:
                 with colu1:
                     submit = st.button(label = "Ja", type = 'primary', key = f"delete-{x['_id']}")
                 if submit: 
-                    tools.update_one(collection, x["_id"])
+                    tools.delete_item(collection, x["_id"])
                 with colu3: 
                     st.button(label="Nein", on_click = st.success, args=("Nicht gelöscht!",), key = f"not-deleted-{x['_id']}")
 
