@@ -27,6 +27,9 @@ def init_css():
     span[data-baseweb="tag"] {
       background-color: orange !important;
     }
+    /* Lange Einträge in Multiselect-Tags vollständig anzeigen (umbrechen statt abschneiden) */
+    .stMultiSelect span[data-baseweb="tag"] { max-width: none !important; height: auto !important; }
+    .stMultiSelect span[data-baseweb="tag"] span[title] { max-width: none !important; overflow: visible !important; white-space: normal !important; text-overflow: clip !important; }
     </style>
     """,
         unsafe_allow_html=True,
